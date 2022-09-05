@@ -1,0 +1,31 @@
+$colorBlue: #2196f3;
+$colorWhite: #fff;
+$ColorGrey: #c3cdd3;
+$colorBlack: #4a4a4a;
+$colorBG: #f3f7fa;
+
+
+body {
+  background-color: $colorBG;
+}
+.wrapper {
+  width: 1024px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.header, .content {
+  background-color: $colorBG;
+  color: black;
+  padding: 20px;
+  height: auto;
+}
+.logo   {
+  margin: auto;
+  background-color: $colorBlue;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  -webkit-box-shadow: 0px 2px 6px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 0px 2px 6px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 0px 2px 6px 0px rgba(34, 60, 80, 0.2);
+}
