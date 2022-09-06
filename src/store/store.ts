@@ -1,25 +1,37 @@
 import { types, Instance } from 'mobx-state-tree';
 import { Ticket, FilterTransfer } from '../models';
 import { values } from 'mobx';
-import type { IFilterTransfer, ITicket } from '../models';
+import type { IFilterTransfer } from '../models';
+import { SortMode } from '../models/SortMode';
+interface IFilter {
+    value: number;
+    label: string;
+    show: boolean;
+}
 
 export const RootStore = types
     .model({
         tickets: types.array(Ticket),
         filterTransfer: types.array(FilterTransfer),
+        filterMode: types.array(SortMode),
+        mode: types.string,
     })
     .views(self => ({
-        // get ticketsOfFast() {
-        //     return self.tickets.filter(ticket => ticket.transfer.split(',').length <= 1)
-        // },
         get useFilter() {
             return filterTickets(
                 values(self.tickets),
-                values(self.filterTransfer)
+                values(self.filterTransfer),
+                self.mode
             );
         },
         get getFilters() {
             return values(self.filterTransfer);
+        },
+        get getSortMode() {
+            return values(self.filterMode);
+        },
+        get getMode() {
+            return self.mode;
         },
     }))
     .actions(self => {
@@ -30,8 +42,16 @@ export const RootStore = types
                     : (item.show = false)
             );
         }
+        function setFilterAll(check: boolean) {
+            values(self.filterTransfer).forEach(item => (item.show = check));
+        }
+        function setMode(mode: string) {
+            self.mode = mode;
+        }
         return {
             updateFilter,
+            setMode,
+            setFilterAll,
         };
     });
 export type RootStoreModel = Instance<typeof RootStore>;
@@ -46,10 +66,17 @@ export const store: RootStoreModel = RootStore.create({
         },
         {
             id: 2,
-            cost: 14000,
-            timeThere: 12,
-            timeBack: 11,
-            transfer: 'MSK, PGK',
+            cost: 25000,
+            timeThere: 14,
+            timeBack: 13,
+            transfer: 'MSK, VRN',
+        },
+        {
+            id: 3,
+            cost: 16000,
+            timeThere: 15,
+            timeBack: 14,
+            transfer: 'MSK, VRN, KZS',
         },
     ],
     filterTransfer: [
@@ -61,7 +88,7 @@ export const store: RootStoreModel = RootStore.create({
         {
             value: 1,
             label: '1 пересадока',
-            show: false,
+            show: true,
         },
         {
             value: 2,
@@ -71,23 +98,41 @@ export const store: RootStoreModel = RootStore.create({
         {
             value: 3,
             label: '3 пересадоки',
-            show: false,
+            show: true,
         },
     ],
+    filterMode: [
+        {
+            label: 'САМЫЙ ДЕШЕВЫЙ',
+            value: '1',
+        },
+        {
+            label: 'САМЫЙ БЫСТРЫЙ',
+            value: '2',
+        },
+    ],
+    mode: '1',
 });
-interface IFilter {
-    value: number;
-    label: string;
-    show: boolean;
-}
+
+/*tbd вынести в отдельный файл*/
 function filterTickets<Array>(
     tickets: ReadonlyArray<Array>,
-    filterObj: ReadonlyArray<IFilterTransfer>
+    filterObj: ReadonlyArray<IFilterTransfer>,
+    mode: string
 ) {
     let transfer: IFilter[] = filterObj.filter(i => i.show === true);
     let transferC = transfer.map(i => i.value + 1);
-    console.log('filterTickets', transferC);
-    return tickets.filter((ticket: any) =>
-        transferC.includes(ticket.transfer.split(',').length)
-    );
+    return tickets
+        .filter((ticket: any) =>
+            transferC.includes(ticket.transfer.split(',').length)
+        )
+        .sort((a: any, b: any) => {
+            if (mode === '1') {
+                return a.cost - b.cost;
+            } else {
+                return (
+                    a.transfer.split(',').length - b.transfer.split(',').length
+                );
+            }
+        });
 }

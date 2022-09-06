@@ -1,5 +1,8 @@
-.side-filter{
-  background: #fff;
+//при дальнейшем развитии следует разбить на стили для каждого компонента
+@import './../variables';
+
+.main-filter {
+  background: $colorWhite;
   border-radius: 5px;
   padding: 20px;
   margin-right: 20px;
@@ -30,26 +33,26 @@
     border-radius: 0 5px 5px 0;
   }
 }
-.card{
+.ticket{
   margin: 20px 0;
   -webkit-box-shadow: 0px 2px 6px 0px rgba(34, 60, 80, 0.2);
   -moz-box-shadow: 0px 2px 6px 0px rgba(34, 60, 80, 0.2);
   box-shadow: 0px 2px 6px 0px rgba(34, 60, 80, 0.2);
-  .card-header{
+  .ticket-header{
     margin-bottom: 15px;
     span {
       font-size: 26px;
       font-weight: bold;
-      color: #2196f3;
+      color: $colorBlue;
     }
     img {
       margin-left: -22px;
     }
   }
-  .card-title {
-    color: #c3cdd3;
+  .ticket-row-title {
+    color: $сolorGrey;
   }
-  .card-result {
+  .ticket-row-result {
     font-weight: bold;
   }
 }

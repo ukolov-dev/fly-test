@@ -1,9 +1,4 @@
-$colorBlue: #2196f3;
-$colorWhite: #fff;
-$ColorGrey: #c3cdd3;
-$colorBlack: #4a4a4a;
-$colorBG: #f3f7fa;
-
+@import './variables';
 
 body {
   background-color: $colorBG;

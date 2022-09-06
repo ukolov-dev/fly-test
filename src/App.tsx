@@ -2,9 +2,7 @@ import React, { FunctionComponent } from 'react';
 import 'antd/dist/antd.css';
 import './App.scss';
 import { Layout, Col, Row } from 'antd';
-import SideFilter from './components/SideFilter';
-import TopFilter from './components/TopFilter';
-import Cards from './components/Cards';
+import { TicketCard, Filter, SortButton } from './components';
 import { observer } from 'mobx-react-lite';
 import { RootStore } from './store/store';
 import { Instance } from 'mobx-state-tree';
@@ -24,12 +22,12 @@ const App: FunctionComponent<Props> = observer(({ store }) => {
                 <Layout>
                     <Row className="content">
                         <Col span={8}>
-                            <SideFilter store={store} />
+                            <Filter store={store} />
                         </Col>
                         <Col span={16}>
-                            <TopFilter />
+                            <SortButton store={store} />
                             {store.useFilter.map(ticket => (
-                                <Cards {...ticket} />
+                                <TicketCard {...ticket} />
                             ))}
                         </Col>
                     </Row>
